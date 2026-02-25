@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nama UMKM - Produk & Kontak</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <a class="brand" href="#beranda">
+        <img class="brand__logo" src="assets/img/logo.png" alt="Logo UMKM" />
+        <div class="brand__text">
+          <strong>Nama UMKM</strong>
+          <span>Tagline singkat (mis. “Enak, Halal, dan Terjangkau”)</span>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a href="#tentang">Tentang</a>
+        <a href="#produk">Produk</a>
+        <a href="#kontak">Kontak</a>
+      </nav>
+
+      <a class="btn btn--wa" id="btnWaTop" href="#" target="_blank" rel="noopener">
+        WhatsApp
+      </a>
+    </div>
+  </header>
+
+  <main id="beranda">
+    <section class="hero">
+      <div class="container hero__inner">
+        <div class="hero__text">
+          <h1>Produk unggulan UMKM kamu</h1>
+          <p>
+            Jelaskan singkat: apa yang dijual, keunggulan, dan area pengiriman/layanan.
+          </p>
+          <div class="hero__cta">
+            <a class="btn" href="#produk">Lihat Produk</a>
+            <a class="btn btn--outline" id="btnWaHero" href="#" target="_blank" rel="noopener">Order via WhatsApp</a>
+          </div>
+          <div class="hero__meta">
+            <span>📍 Kota/Kabupaten</span>
+            <span>🕒 Jam operasional</span>
+            <span>🚚 Delivery / Pickup</span>
+          </div>
+        </div>
+
+        <div class="hero__img">
+          <img src="assets/img/produk-1.jpg" alt="Foto produk unggulan" />
+        </div>
+      </div>
+    </section>
+
+    <section id="tentang" class="section">
+      <div class="container">
+        <h2>Tentang Kami</h2>
+        <p>
+          Tulis 3–5 kalimat tentang usaha kamu: berdiri sejak kapan, fokus produk,
+          bahan/quality, dan apa yang membedakan dari yang lain.
+        </p>
+      </div>
+    </section>
+
+    <section id="produk" class="section section--alt">
+      <div class="container">
+        <div class="section__head">
+          <h2>Produk</h2>
+          <p>Pilih produk yang paling sering dibeli. Cantumkan harga dan deskripsi singkat.</p>
+        </div>
+
+        <div class="grid">
+          <!-- Card produk 1 -->
+          <article class="card">
+            <img class="card__img" src="assets/img/produk-1.jpg" alt="Nama Produk 1" />
+            <div class="card__body">
+              <h3 class="card__title">Nama Produk 1</h3>
+              <p class="card__desc">Deskripsi singkat produk (rasa/ukuran/isi).</p>
+              <div class="card__foot">
+                <span class="price">Rp 25.000</span>
+                <button class="btn btn--small btnOrder"
+                  data-produk="Nama Produk 1"
+                  data-harga="Rp 25.000">Pesan</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card produk 2 -->
+          <article class="card">
+            <img class="card__img" src="assets/img/produk-2.jpg" alt="Nama Produk 2" />
+            <div class="card__body">
+              <h3 class="card__title">Nama Produk 2</h3>
+              <p class="card__desc">Deskripsi singkat produk (rasa/ukuran/isi).</p>
+              <div class="card__foot">
+                <span class="price">Rp 18.000</span>
+                <button class="btn btn--small btnOrder"
+                  data-produk="Nama Produk 2"
+                  data-harga="Rp 18.000">Pesan</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Tambah card lagi kalau perlu -->
+        </div>
+      </div>
+    </section>
+
+    <section id="kontak" class="section">
+      <div class="container">
+        <h2>Kontak</h2>
+        <p>
+          Klik tombol WhatsApp untuk order. Bisa tambahkan alamat dan Google Maps bila mau.
+        </p>
+
+        <div class="contact">
+          <div class="contact__box">
+            <h3>WhatsApp</h3>
+            <p id="waInfo">Nomor: +62xxxxxxxxxxx</p>
+            <a class="btn btn--wa" id="btnWaContact" href="#" target="_blank" rel="noopener">
+              Chat WhatsApp
+            </a>
+          </div>
+
+          <div class="contact__box">
+            <h3>Alamat</h3>
+            <p>Alamat singkat (opsional)</p>
+            <p>Instagram: @akunmu (opsional)</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Tombol WA mengambang -->
+  <a class="fab-wa" id="fabWa" href="#" target="_blank" rel="noopener" aria-label="Chat WhatsApp">
+    WA
+  </a>
+
+  <footer class="footer">
+    <div class="container">
+      <small>© <span id="year"></span> Nama UMKM. All rights reserved.</small>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
