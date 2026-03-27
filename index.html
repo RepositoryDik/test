@@ -1,149 +1,217 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nama UMKM - Produk & Kontak</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IndukShop - Belanja Muda, Bangga Indonesia</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    :root { --tw-color-primary: #0033A0; --tw-color-accent: #CE1126; }
+    body { font-family: 'Inter', sans-serif; }
+    .hero-bg { background: linear-gradient(90deg, #0033A0, #CE1126); }
+    .card-hover { transition: all 0.3s; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgb(0 51 160 / 0.2); }
+  </style>
 </head>
-<body>
-  <header class="header">
-    <div class="container header__inner">
-      <a class="brand" href="#beranda">
-        <img class="brand__logo" src="assets/img/logo.png" alt="Logo UMKM" />
-        <div class="brand__text">
-          <strong>Nama UMKM</strong>
-          <span>Tagline singkat (mis. “Enak, Halal, dan Terjangkau”)</span>
-        </div>
-      </a>
+<body class="bg-white text-gray-900">
+  <!-- Navbar -->
+  <nav class="bg-[#0033A0] text-white sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3 text-2xl font-bold">
+        <span class="text-3xl">🛒</span> IndukShop
+      </div>
+      <div class="flex-1 max-w-xl mx-8">
+        <input id="searchInput" type="text" placeholder="Cari produk atau etalase..." 
+               class="w-full px-6 py-3 rounded-2xl bg-white/10 text-white placeholder:text-white/70 focus:outline-none focus:bg-white/20">
+      </div>
+      <div class="flex items-center gap-6 text-xl">
+        <button onclick="toggleCart()" class="relative"><i class="fa-solid fa-cart-shopping"></i><span id="cartCount" class="absolute -top-2 -right-2 bg-[#CE1126] text-xs rounded-full px-1.5">0</span></button>
+        <button onclick="showProfile()" class="flex items-center gap-2"><i class="fa-solid fa-circle-user"></i> <span id="userName">Login</span></button>
+        <button onclick="showAdminPanel()" class="hidden bg-white text-[#0033A0] px-5 py-2 rounded-2xl font-semibold text-sm" id="adminBtn">👷‍♂️ Admin Etalase</button>
+      </div>
+    </div>
+  </nav>
 
-      <nav class="nav">
-        <a href="#tentang">Tentang</a>
-        <a href="#produk">Produk</a>
-        <a href="#kontak">Kontak</a>
-      </nav>
-
-      <a class="btn btn--wa" id="btnWaTop" href="#" target="_blank" rel="noopener">
-        WhatsApp
-      </a>
+  <!-- Hero -->
+  <header class="hero-bg text-white py-16">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <h1 class="text-6xl font-bold mb-4">Belanja Muda.<br> Bangga Indonesia.</h1>
+      <p class="text-xl mb-8">Etalase keren dari Induk Perusahaan • Gratis ongkir • Cashback Gen Z</p>
+      <button onclick="document.getElementById('productsSection').scrollIntoView({behavior:'smooth'})" 
+              class="bg-white text-[#CE1126] font-bold px-10 py-4 rounded-3xl text-xl hover:scale-105 transition">
+        Belanja Sekarang →
+      </button>
     </div>
   </header>
 
-  <main id="beranda">
-    <section class="hero">
-      <div class="container hero__inner">
-        <div class="hero__text">
-          <h1>Produk unggulan UMKM kamu</h1>
-          <p>
-            Jelaskan singkat: apa yang dijual, keunggulan, dan area pengiriman/layanan.
-          </p>
-          <div class="hero__cta">
-            <a class="btn" href="#produk">Lihat Produk</a>
-            <a class="btn btn--outline" id="btnWaHero" href="#" target="_blank" rel="noopener">Order via WhatsApp</a>
-          </div>
-          <div class="hero__meta">
-            <span>📍 Kota/Kabupaten</span>
-            <span>🕒 Jam operasional</span>
-            <span>🚚 Delivery / Pickup</span>
-          </div>
-        </div>
+  <!-- Etalase Section -->
+  <section class="max-w-7xl mx-auto px-6 py-10">
+    <h2 class="text-3xl font-bold mb-6">Etalase Terbaru</h2>
+    <div id="etalaseGrid" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
+  </section>
 
-        <div class="hero__img">
-          <img src="assets/img/produk-1.jpg" alt="Foto produk unggulan" />
-        </div>
-      </div>
-    </section>
+  <!-- Products -->
+  <section id="productsSection" class="max-w-7xl mx-auto px-6 py-10 bg-gray-50">
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-3xl font-bold">Produk Unggulan</h2>
+      <select id="categoryFilter" onchange="filterProducts()" class="px-4 py-2 rounded-2xl border">
+        <option value="">Semua Kategori</option>
+      </select>
+    </div>
+    <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"></div>
+  </section>
 
-    <section id="tentang" class="section">
-      <div class="container">
-        <h2>Tentang Kami</h2>
-        <p>
-          Tulis 3–5 kalimat tentang usaha kamu: berdiri sejak kapan, fokus produk,
-          bahan/quality, dan apa yang membedakan dari yang lain.
-        </p>
-      </div>
-    </section>
-
-    <section id="produk" class="section section--alt">
-      <div class="container">
-        <div class="section__head">
-          <h2>Produk</h2>
-          <p>Pilih produk yang paling sering dibeli. Cantumkan harga dan deskripsi singkat.</p>
-        </div>
-
-        <div class="grid">
-          <!-- Card produk 1 -->
-          <article class="card">
-            <img class="card__img" src="assets/img/produk-1.jpg" alt="Nama Produk 1" />
-            <div class="card__body">
-              <h3 class="card__title">Nama Produk 1</h3>
-              <p class="card__desc">Deskripsi singkat produk (rasa/ukuran/isi).</p>
-              <div class="card__foot">
-                <span class="price">Rp 25.000</span>
-                <button class="btn btn--small btnOrder"
-                  data-produk="Nama Produk 1"
-                  data-harga="Rp 25.000">Pesan</button>
-              </div>
-            </div>
-          </article>
-
-          <!-- Card produk 2 -->
-          <article class="card">
-            <img class="card__img" src="assets/img/produk-2.jpg" alt="Nama Produk 2" />
-            <div class="card__body">
-              <h3 class="card__title">Nama Produk 2</h3>
-              <p class="card__desc">Deskripsi singkat produk (rasa/ukuran/isi).</p>
-              <div class="card__foot">
-                <span class="price">Rp 18.000</span>
-                <button class="btn btn--small btnOrder"
-                  data-produk="Nama Produk 2"
-                  data-harga="Rp 18.000">Pesan</button>
-              </div>
-            </div>
-          </article>
-
-          <!-- Tambah card lagi kalau perlu -->
-        </div>
-      </div>
-    </section>
-
-    <section id="kontak" class="section">
-      <div class="container">
-        <h2>Kontak</h2>
-        <p>
-          Klik tombol WhatsApp untuk order. Bisa tambahkan alamat dan Google Maps bila mau.
-        </p>
-
-        <div class="contact">
-          <div class="contact__box">
-            <h3>WhatsApp</h3>
-            <p id="waInfo">Nomor: +62xxxxxxxxxxx</p>
-            <a class="btn btn--wa" id="btnWaContact" href="#" target="_blank" rel="noopener">
-              Chat WhatsApp
-            </a>
-          </div>
-
-          <div class="contact__box">
-            <h3>Alamat</h3>
-            <p>Alamat singkat (opsional)</p>
-            <p>Instagram: @akunmu (opsional)</p>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Tombol WA mengambang -->
-  <a class="fab-wa" id="fabWa" href="#" target="_blank" rel="noopener" aria-label="Chat WhatsApp">
-    WA
-  </a>
-
-  <footer class="footer">
-    <div class="container">
-      <small>© <span id="year"></span> Nama UMKM. All rights reserved.</small>
+  <!-- Footer + Aduan -->
+  <footer class="bg-[#0033A0] text-white py-12">
+    <div class="max-w-7xl mx-auto px-6 text-center">
+      <p class="text-2xl mb-4">Ada masalah? Langsung adukan!</p>
+      <button onclick="kirimAduanWhatsApp()" 
+              class="bg-[#CE1126] hover:bg-red-700 px-8 py-4 rounded-3xl text-xl font-semibold inline-flex items-center gap-3">
+        <i class="fa-brands fa-whatsapp text-3xl"></i> KIRIM ADUAN KE WHATSAPP ADMIN
+      </button>
+      <p class="mt-8 text-sm opacity-75">© 2026 IndukShop • Dibuat dengan ❤️ untuk Gen Z Indonesia</p>
     </div>
   </footer>
 
-  <script src="script.js"></script>
+  <!-- Cart Modal -->
+  <div id="cartModal" class="hidden fixed inset-0 bg-black/70 flex items-end md:items-center justify-center z-[9999]">
+    <!-- isi cart diisi via JS -->
+  </div>
+
+  <!-- Admin Panel Modal -->
+  <div id="adminModal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[9999]">
+    <div class="bg-white rounded-3xl max-w-lg w-full mx-4 p-8">
+      <h2 class="text-3xl font-bold mb-6">Buat Etalase Baru</h2>
+      <input id="etalaseName" placeholder="Nama Etalase" class="w-full mb-4 px-6 py-4 border rounded-2xl">
+      <textarea id="etalaseDesc" placeholder="Deskripsi" class="w-full mb-4 px-6 py-4 border rounded-2xl h-32"></textarea>
+      <button onclick="createEtalase()" class="w-full bg-[#0033A0] text-white py-4 rounded-3xl font-bold">Buat & Publish Etalase</button>
+      <button onclick="hideAdminPanel()" class="w-full mt-3 text-gray-500">Batal</button>
+    </div>
+  </div>
+
+  <script>
+    // === GANTI DENGAN MILIK ANDA ===
+    const SUPABASE_URL = 'https://your-project.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJ...';
+
+    const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let currentUser = null;
+    let cart = [];
+
+    // Tailwind config
+    function initTailwind() {
+      tailwind.config = {
+        content: ["./**/*.{html,js}"],
+        theme: { extend: { colors: { primary: '#0033A0', accent: '#CE1126' } } }
+      };
+    }
+
+    async function checkAuth() {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        currentUser = session.user;
+        const { data: profile } = await supabase.from('profiles').select('*').eq('id', currentUser.id).single();
+        document.getElementById('userName').innerHTML = `<i class="fa-solid fa-circle-user"></i> ${profile?.full_name || 'User'}`;
+        if (profile?.role === 'admin') {
+          document.getElementById('adminBtn').classList.remove('hidden');
+        }
+      }
+    }
+
+    async function loadEtalases() {
+      const { data } = await supabase.from('etalases').select('*');
+      const grid = document.getElementById('etalaseGrid');
+      grid.innerHTML = data.map(e => `
+        <div class="bg-white rounded-3xl overflow-hidden shadow-md card-hover">
+          <img src="${e.banner_url}" class="w-full h-40 object-cover">
+          <div class="p-4">
+            <h3 class="font-semibold">${e.name}</h3>
+            <p class="text-sm text-gray-500">${e.description}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function loadProducts(filter = '') {
+      let query = supabase.from('products').select('*');
+      if (filter) query = query.eq('category', filter);
+      const { data } = await query;
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = data.map(p => `
+        <div class="bg-white rounded-3xl overflow-hidden shadow-md card-hover">
+          <img src="${p.image_url}" class="w-full h-52 object-cover">
+          <div class="p-4">
+            <h4 class="font-semibold text-lg">${p.name}</h4>
+            <p class="text-sm text-gray-500 line-clamp-2">${p.description}</p>
+            <div class="flex justify-between items-end mt-4">
+              <div>
+                <span class="text-2xl font-bold text-[#CE1126]">Rp ${p.price.toLocaleString('id-ID')}</span>
+              </div>
+              <button onclick="addToCart(${p.id}, '${p.name}', ${p.price})" 
+                      class="bg-[#0033A0] text-white px-6 py-2 rounded-2xl text-sm font-medium">+ Keranjang</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addToCart(id, name, price) {
+      cart.push({ id, name, price, qty: 1 });
+      updateCartCount();
+      alert('✅ Ditambahkan ke keranjang!');
+    }
+
+    function updateCartCount() {
+      document.getElementById('cartCount').textContent = cart.length;
+    }
+
+    function toggleCart() { /* isi modal cart */ alert('Cart feature siap (bisa dikembangkan lebih lanjut)'); }
+
+    async function createEtalase() {
+      if (!currentUser) return alert('Login dulu!');
+      const name = document.getElementById('etalaseName').value;
+      const desc = document.getElementById('etalaseDesc').value;
+      const { error } = await supabase.from('etalases').insert({
+        name, description: desc, admin_id: currentUser.id, banner_url: 'https://picsum.photos/id/300/800/300'
+      });
+      if (!error) {
+        alert('✅ Etalase berhasil dibuat!');
+        hideAdminPanel();
+        loadEtalases();
+      }
+    }
+
+    function showAdminPanel() { document.getElementById('adminModal').classList.remove('hidden'); }
+    function hideAdminPanel() { document.getElementById('adminModal').classList.add('hidden'); }
+
+    function kirimAduanWhatsApp() {
+      const nomor = '6281234567890'; // GANTI DENGAN NOMOR WHATSAPP ADMIN ANDA
+      const text = encodeURIComponent('Halo Admin IndukShop 👋\nSaya ingin mengadukan:\n[isi aduan Anda di sini]');
+      window.open(`https://wa.me/${nomor}?text=${text}`, '_blank');
+    }
+
+    function showProfile() {
+      // Simple login simulation / redirect ke Supabase auth
+      alert('🔐 Fitur login via Supabase sudah terintegrasi. Silakan login di aplikasi!');
+    }
+
+    function filterProducts() {
+      const cat = document.getElementById('categoryFilter').value;
+      loadProducts(cat);
+    }
+
+    // INIT
+    window.onload = () => {
+      initTailwind();
+      checkAuth();
+      loadEtalases();
+      loadProducts();
+      // Tambahkan kategori ke filter (bisa di-expand)
+    };
+  </script>
 </body>
 </html>
